@@ -4,9 +4,10 @@ const nodemailer = require('nodemailer');
 const cors = require('cors');
 const { google } = require('googleapis');
 const OAuth2 = google.auth.OAuth2;
+const https = require('https');
 
 const app = express();
-// Enable CORS
+// Enable CORS & express
 app.use(cors());
 app.use(express.json());
 
@@ -24,12 +25,11 @@ app.post('/send-email', (req, res) => {
         service: process.env.SERVICE,
         auth: {
           type: 'OAuth2',
-          user: process.env.EMAIL, // Gmail address
+          user: process.env.EMAIL,
           clientId: process.env.CLIENTID,
           clientSecret: process.env.CLIENTSECRET,
           refreshToken: process.env.REFRESHTOKEN,
           accessToken: accessToken
-          //pass: process.env.KEY, // Gmail password or app-specific password
         },
       });
   
@@ -52,8 +52,26 @@ app.post('/send-email', (req, res) => {
     });
   });
   
-  app.get('/', (req,res) => { res.send(`Server is running.`) })
+//app.get('/', (req,res) => { res.send(`Server is running.`) }) - For development
+
+// Ping endpoint
+app.get('/ping', (req, res) => {
+  res.send('Ping received.');
+});
+
 // Start the server
 app.listen(process.env.PORT || 8080, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
 });
+
+// Ping the server at regular intervals to keep it running
+const pingInterval = 14 * 60 * 1000; // 14 minutes. Render runs down the server after 15 minutes
+setInterval(() => {
+  const pingUrl = 'https://move-it-sports-coaching-api.onrender.com/ping';
+  // Send an HTTPS GET request to the ping URL
+  https.get(pingUrl, (res) => {
+    console.log('Ping sent.');
+  }).on('error', (error) => {
+    console.error('Error while sending ping:', error);
+  });
+}, pingInterval);
