@@ -14,7 +14,6 @@ app.use(express.json());
 const OAuth2_client = new OAuth2(process.env.CLIENTID, process.env.CLIENTSECRET);
 OAuth2_client.setCredentials({ refresh_token : process.env.REFRESHTOKEN });
 
-
 // Define the email sending route
 app.post('/send-email', (req, res) => {
     const { postName, postEmail, postContent } = req.body; // Destructure the properties from req.body
@@ -52,7 +51,7 @@ app.post('/send-email', (req, res) => {
     });
   });
   
-//app.get('/', (req,res) => { res.send(`Server is running.`) }) - For development
+app.get('/', (req,res) => { res.send(`Server is running.`) });
 
 // Ping endpoint
 app.get('/ping', (req, res) => {
