@@ -35,7 +35,7 @@ app.post('/send-email', (req, res) => {
     // Email sending options
     const mailOptions = {
       to: process.env.EMAIL, // Recipient email address
-      subject: '***TEST*** New Enquiry from Website', // Email subject
+      subject: 'New Enquiry from Website', // Email subject
       text: `Name: ${postName}\nEmail: ${postEmail}\nContent: ${postContent}`, // Email body
     };
   
