@@ -4,7 +4,7 @@ const nodemailer = require('nodemailer');
 const cors = require('cors');
 const { google } = require('googleapis');
 const OAuth2 = google.auth.OAuth2;
-const https = require('https');
+//const https = require('https');
 
 const app = express();
 // Enable CORS & express
@@ -35,7 +35,7 @@ app.post('/send-email', (req, res) => {
     // Email sending options
     const mailOptions = {
       to: process.env.EMAIL, // Recipient email address
-      subject: 'New Enquiry from Website', // Email subject
+      subject: 'New Enquiry from ${postName}', // Email subject
       text: `Name: ${postName}\nEmail: ${postEmail}\nContent: ${postContent}`, // Email body
     };
   
@@ -53,14 +53,14 @@ app.post('/send-email', (req, res) => {
   
 app.get('/', (req,res) => { res.send(`Server is running.`) });
 
-// Ping endpoint
-app.get('/ping', (req, res) => {
-  res.send('Ping received.');
-});
-
 // Start the server
 app.listen(process.env.PORT || 8080, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
+});
+
+// Ping endpoint
+/*app.get('/ping', (req, res) => {
+  res.send('Ping received.');
 });
 
 // Ping the server at regular intervals to keep it running
@@ -73,4 +73,4 @@ setInterval(() => {
   }).on('error', (error) => {
     console.error('Error while sending ping:', error);
   });
-}, pingInterval);
+}, pingInterval);*/
